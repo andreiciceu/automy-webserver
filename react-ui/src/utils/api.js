@@ -1,15 +1,18 @@
-import { apiConfig } from '../config';
 import axios from 'axios';
+import { apiConfig } from '../config';
 
-export function apiUrl(endpoint) {
-  let host = window.location.hostname;
+
+export function apiUrl(_endpoint) {
+  // const host = window.location.hostname;
+  const { host } = apiConfig;
+  let endpoint = _endpoint;
   // if ('/' === host[host.length - 1]) {
   //   host = host.substr(0, host.length - 1);
   // }
   // if (host.indexOf(':')) {
   //   host = host.substr(0, host.indexOf(':'));
   // }
-  if ('/' === endpoint[0]) {
+  if (endpoint[0] === '/') {
     endpoint = endpoint.substr(1);
   }
 
@@ -19,7 +22,7 @@ export function apiUrl(endpoint) {
 export function get(endpoint, breakCache) {
   let url = apiUrl(endpoint);
   if (breakCache) {
-    url += "?_r=" + Math.random();
+    url += `${endpoint.indexOf('?') > 0 ? '&' : '?'}_r=${Math.random()}`;
   }
   return axios.get(url);
 }
